@@ -1,0 +1,3 @@
+gcc main.c globals.c intersection.c parking.c vehicle.c controller.c helper.c -o sim -pthread
+
+./sim
