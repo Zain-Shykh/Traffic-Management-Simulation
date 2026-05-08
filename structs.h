@@ -56,6 +56,7 @@ typedef struct {
     int emergencyActive;        // 1 = emergency vehicle is crossing, 0 = no emergency
     int carsInside;             // number of vehicles currently crossing the intersection
     pthread_mutex_t mutex;      // protects access to the intersection's state
+    pthread_cond_t cond;        // condition variable to notify waiting vehicles
 } Intersection;
 
 typedef struct {

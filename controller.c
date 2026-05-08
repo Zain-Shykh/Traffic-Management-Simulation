@@ -45,6 +45,7 @@ void run_controller(int id) {
             pthread_mutex_lock(&inter->mutex);
             inter->emergencyActive = 1;
             inter->green = 0;
+            pthread_cond_broadcast(&inter->cond);
             pthread_mutex_unlock(&inter->mutex);
             printf("[Controller F%d] intersection CLEARED for emergency\n", id);
             fflush(stdout);
@@ -53,6 +54,7 @@ void run_controller(int id) {
             pthread_mutex_lock(&inter->mutex);
             inter->emergencyActive = 0;
             inter->green = 1;
+            pthread_cond_broadcast(&inter->cond);
             pthread_mutex_unlock(&inter->mutex);
             printf("[Controller F%d] traffic RESTORED\n", id);
             fflush(stdout);
@@ -87,6 +89,7 @@ void trigger_emergency(Vehicle *v, Intersection *inter) {
     pthread_mutex_lock(&inter->mutex);
     inter->emergencyActive = 1;
     inter->green = 0;
+    pthread_cond_broadcast(&inter->cond);
     pthread_mutex_unlock(&inter->mutex);
 
     // Notify the other controller about the emergency
@@ -109,6 +112,7 @@ void trigger_emergency(Vehicle *v, Intersection *inter) {
     inter->emergencyActive = 0;
     inter->green = 1;
     inter->carsInside--;
+    pthread_cond_broadcast(&inter->cond);
     pthread_mutex_unlock(&inter->mutex);
 
     sleep(2);//simulate the time taken to cross the other intersection after the this one
